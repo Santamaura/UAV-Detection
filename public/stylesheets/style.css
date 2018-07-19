@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+body {
+  font-family: 'Raleway', sans-serif !important;
+}
+
+a {
+  color: #00B7FF;
+}
+#drawCanvas{
+  position: absolute;
+}
+
+#videoContainer{
+  width: 800px;
+  height: 600px;
+}
