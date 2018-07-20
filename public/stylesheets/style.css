@@ -14,3 +14,4 @@ a {
   width: 800px;
   height: 600px;
 }
+#map { position:absolute; top:0; bottom:0; width:100%; }
