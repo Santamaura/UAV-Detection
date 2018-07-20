@@ -14,12 +14,14 @@ a {
   width: 800px;
   height: 600px;
 }
-#map { position:absolute; top:0; bottom:0; width:100%; }
-
-#center{
-   margin: auto;
-    width: 60%;
-    border: 3px solid #73AD21;
-    padding: 10px;
-    font-size: large;
+#map { 
+  margin: auto;
+  position:absolute; 
+  text-align: center;
+  top:250px; 
+  bottom:0; 
+  width:100%;
+  padding: 10px; 
+  font-size: 300%;
 }
+
