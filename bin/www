@@ -27,26 +27,11 @@ var io = require('socket.io')(server);
 io.on('connection', function (socket) {
   console.log("connected");
   
-  // for (var i = 0; i < 10; i++) {
-    // setTimeout(function(){
   socket.emit("message", "NO SIGNAL");
-    // },5000);
-    
-  // }
-  for (var i = 0; i < 10; i++) {
-    // demo(7000);
-    setTimeout(function(){
-      socket.emit("message", "~10 METRES");
-    },3000);
-   
-  }
-  for (var i = 0; i < 10; i++) {
-    // demo(5000);
-    setTimeout(function(){
-      socket.emit("message", "~5 METRES");
-    },11000);
-    // socket.emit("message", "~5 METRES");
-  }
+  socket.on('message', function(msg){
+    console.log(msg);
+    io.emit('message', msg);
+  });
 });
 
 server.listen(port);

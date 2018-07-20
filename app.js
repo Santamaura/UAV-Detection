@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 // var Promise = require('bluebird');
 
 var index = require('./routes/index');
+var input = require('./routes/input');
 
 
 var app = express();
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/input',input);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
