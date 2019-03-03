@@ -5,7 +5,17 @@ import Rippling from './DetectedGif/Rippling';
 import styles from './styles.css';
 
 const TOKEN = 'pk.eyJ1IjoiYWpzYW50YW0iLCJhIjoiY2pyZHpmNWt4MXUwZzQ0bndnMGw5MzRjMyJ9.Wun_Glz6UWIONCcdi61btQ';
-
+const DroneMarker = ({marker}) => <Marker
+latitude={marker.lat}
+longitude={marker.long}
+offsetTop={marker.offTop}
+offsetLeft={marker.offLeft}>
+<div
+    className={styles.pin}
+    onClick={() => this.setState({ dronePopupInfo: true })}>
+    <Rippling />
+</div>
+</Marker>;
 export default class Map extends Component {
     constructor(props) {
         super(props);
@@ -25,7 +35,6 @@ export default class Map extends Component {
         this.renderUserPopup = this.renderUserPopup.bind(this);
         this.renderDronePopup = this.renderDronePopup.bind(this);
     }
-
     renderUserPopup() {
         return (
             <Popup
@@ -79,8 +88,12 @@ export default class Map extends Component {
                         </div>
                     </Marker>
                     {this.state.userPopupInfo ? this.renderUserPopup() : null}
-                    <Marker
-                        latitude={43.4695}
+                    Object.keys(this.state.items).map(item => (
+                        <DroneMarker marker={item}/>
+                        {this.state.dronePopupInfo ? this.renderDronePopup() : null}
+                    ))
+                    {/* <DroneMarker marker={{lat: 43.4695, long: -80.5319, offTop: 0, offLeft: 0}} /> */}
+                        {/* latitude={43.4695}
                         longitude={-80.5319}
                         offsetTop={0}
                         offsetLeft={0}>
@@ -89,8 +102,8 @@ export default class Map extends Component {
                             onClick={() => this.setState({ dronePopupInfo: true })}>
                             <Rippling />
                         </div>
-                    </Marker>
-                    {this.state.dronePopupInfo ? this.renderDronePopup() : null}
+                    </Marker> */}
+                    {/* {this.state.dronePopupInfo ? this.renderDronePopup() : null} */}
                 </div>
             </MapGL>
         );
