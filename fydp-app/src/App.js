@@ -4,6 +4,12 @@ import './App.css';
 import Map from './Map/Map.js';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            items = []
+        }
+    }
   componentDidMount() {
     this.timer = setInterval(()=> this.getItems(), 500);
 }

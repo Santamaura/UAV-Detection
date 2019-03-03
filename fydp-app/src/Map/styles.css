@@ -8,3 +8,11 @@
 .pin {
   cursor: pointer;
 }
+
+.tracked {
+  display: none;
+}
+
+.tracked :hover {
+  display: block;
+}
