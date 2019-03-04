@@ -5,34 +5,35 @@ import Rippling from './DetectedGif/Rippling';
 import styles from './styles.css';
 
 const TOKEN = 'pk.eyJ1IjoiYWpzYW50YW0iLCJhIjoiY2pyZHpmNWt4MXUwZzQ0bndnMGw5MzRjMyJ9.Wun_Glz6UWIONCcdi61btQ';
-const DroneMarker = ({marker}) => <Marker
-latitude={marker.estimatedLat}
-longitude={marker.estimatedLon}
-offsetTop={0}
-offsetLeft={0}>
-<div
-    className={styles.pin}
-    onClick={() => this.setState({ dronePopupInfo: true })}>
-    <Rippling />
-</div>
-<div className={styles.tracked}>
-<Popup
-    tipsize={5}
-    anchor="top"
+const DroneMarker = ({ marker }) => <Marker
     latitude={marker.estimatedLat}
     longitude={marker.estimatedLon}
-    offsetTop={48}
-    offsetLeft={38}
-/>
-                        </div>
+    offsetTop={0}
+    offsetLeft={0}>
+    <div
+        className={styles.pin}
+        onClick={() => this.setState({ dronePopupInfo: true })}>
+        <Rippling />
+    </div>
+    <div className={styles.tracked}>
+        <Popup
+            tipsize={5}
+            anchor="top"
+            latitude={marker.estimatedLat}
+            longitude={marker.estimatedLon}
+            offsetTop={48}
+            offsetLeft={38}
+        />
+    </div>
 </Marker>;
+
 export default class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
             viewport: {
-                latitude: this.props.objects["system-stats"].systemLat, 
-                longitude: this.props.objects["system-stats"].systemLon, 
+                latitude: this.props.items.systemStats.systemLat, 
+                longitude: this.props.items.systemStats.systemLon, 
                 zoom: 18.55,
                 bearing: 0,
                 pitch: 0,
@@ -46,7 +47,7 @@ export default class Map extends Component {
         // this.renderDronePopup = this.renderDronePopup.bind(this);
     }
     renderUserPopup() {
-        const { systemLat, systemLon } = this.props.objects["system-stats"];
+        const { systemLat, systemLon } = this.props.objects;
         return (
             <Popup
                 tipSize={5}
@@ -81,8 +82,9 @@ export default class Map extends Component {
     //makes default 1 marker for detection array and then adds markers for all tracked drones
     render() {
         const { viewport } = this.state;
-        const { objects } = this.props;
-        var drones = objects["tracking-info"].map(function(item){
+        const { items } = this.props;
+        console.log(this.props);
+        var drones = items.trackingInfo.map(function(item){
             return <DroneMarker marker={item}/>;
         });
         return (
@@ -92,8 +94,8 @@ export default class Map extends Component {
                 mapboxApiAccessToken={TOKEN}>
                 <div className={styles.navStyle}>
                     <Marker
-                        latitude={objects["system-stats"].systemLat}
-                        longitude={objects["system-stats"].systemLon}
+                        latitude={items.systemStats.systemLat}
+                        longitude={items.systemStats.systemLon}
                         offsetTop={-50}
                         offsetLeft={-100}>
                         <div

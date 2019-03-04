@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
-import items from './sample.json';
+// import items from './sample.json';
 import './App.css';
 import Map from './Map/Map.js';
 
@@ -13,7 +13,7 @@ class App extends Component {
         }
     }
 componentDidMount() {
-  this.timer = setInterval(()=> this.getItems(), 500);
+  this.timer = setInterval(() => this.getItems(), 500);
 }
 
 componentWillUnmount() {
@@ -21,24 +21,27 @@ componentWillUnmount() {
     this.timer = null;
 }
 
-getItems(){
-  this.setState({items: items, isLoading: false});
-    // fetch("/getfile")
-    //     .then(result => result.json())
-    //     .then(result => this.setState({ items: result, isLoading: false }));
-    // this.setState({isLoading: true});
-    // console.log(this.state.items);
+getItems() {
+    fetch("http://192.168.3.4:5000/")
+        .then(result => result.json())
+        .then(result => this.setState({ items: result, isLoading: false }))
+        .catch((error) => {
+          throw error;
+        });
+    this.setState({isLoading: true});
+    console.log(this.state.items);
     // console.log("WHWHWHWHHW");
 }
 
   render() {
     const {items, isLoading} = this.state;
-    console.log(this.state.items);
-    if(isLoading){
-      return <p>Loading ...</p>;
+    console.log(items);
+
+    if(Object.entries(items).length === 0 && items.constructor === Object) {
+      return <p>Loading...</p>;
     }
     return (
-        <Map objects={items}/>
+        <Map items={items}/>
     );
   }
 }
