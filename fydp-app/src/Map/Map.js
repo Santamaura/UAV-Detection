@@ -6,23 +6,33 @@ import styles from './styles.css';
 
 const TOKEN = 'pk.eyJ1IjoiYWpzYW50YW0iLCJhIjoiY2pyZHpmNWt4MXUwZzQ0bndnMGw5MzRjMyJ9.Wun_Glz6UWIONCcdi61btQ';
 const DroneMarker = ({marker}) => <Marker
-latitude={marker.lat}
-longitude={marker.long}
-offsetTop={marker.offTop}
-offsetLeft={marker.offLeft}>
+latitude={marker.estimatedLat}
+longitude={marker.estimatedLon}
+offsetTop={0}
+offsetLeft={0}>
 <div
     className={styles.pin}
     onClick={() => this.setState({ dronePopupInfo: true })}>
     <Rippling />
 </div>
+<div className={styles.tracked}>
+<Popup
+    tipsize={5}
+    anchor="top"
+    latitude={marker.estimatedLat}
+    longitude={marker.estimatedLon}
+    offsetTop={48}
+    offsetLeft={38}
+/>
+                        </div>
 </Marker>;
 export default class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
             viewport: {
-                latitude: parseFloat(this.props.objects.system-stats.systemLat).toPrecision(7), 
-                longitude: parseFloat(this.props.objects.system-stats.systemLon).toPrecision(7), 
+                latitude: this.props.objects["system-stats"].systemLat, 
+                longitude: this.props.objects["system-stats"].systemLon, 
                 zoom: 18.55,
                 bearing: 0,
                 pitch: 0,
@@ -33,10 +43,10 @@ export default class Map extends Component {
             dronePopupInfo: false
         };
         this.renderUserPopup = this.renderUserPopup.bind(this);
-        this.renderDronePopup = this.renderDronePopup.bind(this);
+        // this.renderDronePopup = this.renderDronePopup.bind(this);
     }
     renderUserPopup() {
-        const { systemLat, systemLon } = this.props.objects.system-stats;
+        const { systemLat, systemLon } = this.props.objects["system-stats"];
         return (
             <Popup
                 tipSize={5}
@@ -72,6 +82,9 @@ export default class Map extends Component {
     render() {
         const { viewport } = this.state;
         const { objects } = this.props;
+        var drones = objects["tracking-info"].map(function(item){
+            return <DroneMarker marker={item}/>;
+        });
         return (
             <MapGL
                 {...viewport}
@@ -79,8 +92,8 @@ export default class Map extends Component {
                 mapboxApiAccessToken={TOKEN}>
                 <div className={styles.navStyle}>
                     <Marker
-                        latitude={objects.system-stats.systemLat}
-                        longitude={objects.system-stats.systemLon}
+                        latitude={objects["system-stats"].systemLat}
+                        longitude={objects["system-stats"].systemLon}
                         offsetTop={-50}
                         offsetLeft={-100}>
                         <div
@@ -90,33 +103,8 @@ export default class Map extends Component {
                         </div>
                     </Marker>
                     {this.state.userPopupInfo ? this.renderUserPopup() : null}
-                {objects.tracking-info.items.map((item, i) => {
-                    <Marker 
-                        key={i}
-                        latitude={item.estimatedLat}
-                        longitude={item.estimatedLon}
-                        offsetTop={0}
-                        offsetLeft={0}
-                        >
-                        <div
-                            className={styles.pin}
-                        >
-                            <Rippling />
-                        </div>
-                        <div 
-                            className={styles.tracked}
-                        >
-                            <Popup
-                                tipsize={5}
-                                anchor="top"
-                                latitude={item.estimatedLat}
-                                longitude={item.estimatedLon}
-                                offsetTop={48}
-                                offsetLeft={38}
-                            />
-                        </div>
-                    </Marker>
-                })}
+                    {drones}
+                    {this.state.dronePopupInfo ? this.renderDronePopup() : null}
                     {/* <Marker
                         latitude={43.4695}
                         longitude={-80.5319}
