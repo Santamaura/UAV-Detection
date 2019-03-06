@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import styles from '../App.css';
+import styles from './styles.css';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -13,15 +13,68 @@ import ScannerIcon from '@material-ui/icons/Scanner';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import TimelapseIcon from '@material-ui/icons/Timelapse';
 import LocationIcon from '@material-ui/icons/MyLocation';
+import PortableWifiOffIcon from '@material-ui/icons/PortableWifiOff'
+import WifiTetheringIcon from '@material-ui/icons/WifiTethering'
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
 import { Divider } from '@material-ui/core';
 
+const DetectionItem = ({detectionItem}) => 
+        <ListItem>
+            <ListItemIcon>
+                <PortableWifiOffIcon/>
+            </ListItemIcon>
+            <ListItemText primary={`Estimated Distance: ${detectionItem.estimatedDistance}`}/>
+        </ListItem>;
+const TrackingItem = ({trackingItem, i}) =>
+<div className="shiftedright">
+<ListSubheader>Drone {i+1}</ListSubheader>
+<ListItem>
+    <ListItemIcon>
+        <WifiTetheringIcon/>
+    </ListItemIcon>
+    <ListItemText primary={`Estimated Distance: ${trackingItem.estimatedDistance}`}/>
+</ListItem>
+<ListItem>
+    <ListItemIcon>
+        <WifiTetheringIcon/>
+    </ListItemIcon>
+    <ListItemText primary={`Estimated Angle: ${trackingItem.estimatedAngle}`}/>
+</ListItem>
+<ListItem>
+    <ListItemIcon>
+        <WifiTetheringIcon/>
+    </ListItemIcon>
+    <ListItemText primary={`Estimated Latitude: ${trackingItem.estimatedLat}`}/>
+</ListItem>
+<ListItem>
+    <ListItemIcon>
+        <WifiTetheringIcon/>
+    </ListItemIcon>
+    <ListItemText primary={`Estimated Longitude: ${trackingItem.estimatedLon}`}/>
+</ListItem>
+</div>;
 export default class Panel extends Component {
+    state = {
+        open: true,
+      };
+    
+      handleClick = () => {
+        this.setState(state => ({ open: !state.open }));
+      };
     
 
     render() {
         const systemStats = this.props.items.systemStats;
         const detectionInfo = this.props.items.detectionInfo;
+        var detections = detectionInfo.map(function(item){
+            return <DetectionItem detectionItem={item}/>;
+        });
         const trackingInfo = this.props.items.trackingInfo;
+        var trackings = trackingInfo.map(function(item, i){
+            return <TrackingItem trackingItem={item} i={i}/>;
+        });
         // items in detection and tracking need to be looped
         return (
         <List component="nav">
@@ -77,10 +130,17 @@ export default class Panel extends Component {
           </ListItem>
           <Divider />
           <ListSubheader component="div">Detection Info</ListSubheader>
-          {/* {detectionInfo} */}
+          {detections}
           <Divider />
-          <ListSubheader component="div">Tracking Info</ListSubheader>
-          {/* {trackingInfo} */}
+          <ListSubheader button onClick={this.handleClick}>
+          Tracking Info
+          {this.state.open ? <ExpandLess className="subheaderdropdown"/> : <ExpandMore className="subheaderdropdown"/>}
+          </ListSubheader>
+          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+          {trackings}
+          </List>
+          </Collapse>
           </List>
         )
     }
