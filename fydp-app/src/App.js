@@ -5,12 +5,27 @@ import './App.css';
 import Map from './Map/Map.js';
 import Panel from './Panel/Panel.js';
 import styles from './App.css';
+import classNames from 'classnames';
+import Drawer from '@material-ui/core/Drawer';
 
+const drawerWidth = 240;
+const drawerStyles = theme => ({
+  drawerPaper: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+}
+})
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: {}
+            items: {},
+            open: true
         }
     }
 componentDidMount() {
@@ -42,10 +57,20 @@ getItems() {
       return <p>Loading...</p>;
     }
     return (
-        <div>
-        <Panel className="Panel" items={items.systemStats}/>
+      <div>
+        <div className="Panel">
+          <Drawer
+          variant="permanent"
+          classes={{
+            paper: classNames(drawerStyles.drawerPaper),
+          }}
+          open={this.state.open}>
+          <Panel items={items}/>
+          </Drawer>
+        </div>
         <Map className="Map" items={items}/>
         </div>
+        
     );
   }
 }

@@ -11,8 +11,8 @@ const DroneMarker = ({ marker }) => <Marker
     offsetTop={0}
     offsetLeft={0}>
     <div
-        className={styles.pin}
-        onClick={() => this.setState({ dronePopupInfo: true })}>
+        className={styles.pin}>
+        {/* onClick={() => renderDronePopup()}> */}
         <Rippling />
     </div>
     <div className={styles.tracked}>
@@ -37,8 +37,8 @@ export default class Map extends Component {
                 zoom: 18.55,
                 bearing: 0,
                 pitch: 0,
-                width: 800,
-                height: 800,
+                width:"100%",
+                height:"100%"
             },
             userPopupInfo: false,
             dronePopupInfo: false
