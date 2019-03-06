@@ -28,6 +28,12 @@
 }
 .Map{
   float: left;
+  width: 80vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  margin-left: 340px;
 }
 
 @keyframes App-logo-spin {
