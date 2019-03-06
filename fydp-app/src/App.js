@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
-// import items from './sample.json';
+import items from './sample.json';
 import './App.css';
 import Map from './Map/Map.js';
+import Panel from './Panel/Panel.js';
+import styles from './App.css';
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: {},
-            isLoading: true
+            items: {}
         }
     }
 componentDidMount() {
@@ -22,26 +23,29 @@ componentWillUnmount() {
 }
 
 getItems() {
-    fetch("http://192.168.3.4:5000/")
-        .then(result => result.json())
-        .then(result => this.setState({ items: result, isLoading: false }))
-        .catch((error) => {
-          throw error;
-        });
-    this.setState({isLoading: true});
+  this.setState({items: items});
+    // fetch("http://192.168.3.4:5000/")
+    //     .then(result => result.json())
+    //     .then(result => this.setState({ items: result }))
+    //     .catch((error) => {
+    //       throw error;
+    //     });
+    // this.setState({isLoading: true});
     console.log(this.state.items);
-    // console.log("WHWHWHWHHW");
 }
 
   render() {
-    const {items, isLoading} = this.state;
+    const {items} = this.state;
     console.log(items);
 
     if(Object.entries(items).length === 0 && items.constructor === Object) {
       return <p>Loading...</p>;
     }
     return (
-        <Map items={items}/>
+        <div>
+        <Panel className="Panel" items={items.systemStats}/>
+        <Map className="Map" items={items}/>
+        </div>
     );
   }
 }

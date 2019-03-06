@@ -1,40 +1,27 @@
-{	
-	"detection-info": [
-		{ 
-			"estimatedDistance": 24.6, 
-			"freq": 1.2, 
-			"lastSeen": 1550421512, 
-			"recivedDB": 0.5625
-		}, 
-		{
-			"estimatedDistance": 11.2, 
-			"freq": 1.102, 
-			"lastSeen": 1550421612, 
-			"recivedDB": 0.8972
-		} 
-	], 
-	"tracking-info": [
-		{
-			"estimatedAngle": 161, 
-			"estimatedDistance": 25.1, 
-			"estimatedLat": 43.4695, 
-			"estimatedLon": -80.5319, 
-			"freq": 1.102, 
-			"lastSeen": 1550421514, 
-			"recivedDB": 0.5689
-		} 
-	],
-	"system-stats": {
-		"currentScanFreq": 0.954, 
-		"currentTime": 1550421672, 
+{
+	"detectionInfo": [{
+		"deviceType": "RC Controller",
+		"estimatedDistance": 3.013565525925849,
+		"freq": 2.445,
+		"lastSeen": 1551844621.955553,
+		"recivedDB": 0.11786594688892364
+	}],
+	"trackingInfo": [{
+		"estimatedAngle": 161,
+		"estimatedDistance": 25.1,
+		"estimatedLat": 43.4695,
+		"estimatedLon": -80.5319,
+		"freq": 1.102,
+		"lastSeen": 1550421514,
+		"recivedDB": 0.5689
+	}],
+	"systemStats": {
+		"currentScanFreq": 0.954,
+		"currentTime": 1550421672,
 		"currentTrackFreq": 1.102,
-		"systemLat": 43.469407, 
+		"systemLat": 43.469407,
 		"systemLon": -80.531794,
-		"softwareVersion": 0.1, 
+		"softwareVersion": 0.1,
 		"uptime": 2826
 	}
 }
-
-
-
-

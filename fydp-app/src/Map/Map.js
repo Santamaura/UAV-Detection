@@ -44,7 +44,7 @@ export default class Map extends Component {
             dronePopupInfo: false
         };
         this.renderUserPopup = this.renderUserPopup.bind(this);
-        // this.renderDronePopup = this.renderDronePopup.bind(this);
+        this.renderDronePopup = this.renderDronePopup.bind(this);
     }
     renderUserPopup() {
         const { systemLat, systemLon } = this.props.objects;
@@ -63,32 +63,32 @@ export default class Map extends Component {
         )
     }
 
-    // renderDronePopup() {
-    //     return (
-    //         <Popup
-    //             tipsize={5}
-    //             anchor="top"
-    //             latitude={43.4695}
-    //             longitude={-80.5319}
-    //             offsetTop={48}
-    //             offsetLeft={38}
-    //             onClose={() => this.setState({ dronePopupInfo: null })}
-    //             closeOnClick={true}>
-    //             <p>{'Drone 1'}</p>
-    //         </Popup>
-    //     )
-    // }
+    renderDronePopup() {
+        return (
+            <Popup
+                tipsize={5}
+                anchor="top"
+                latitude={43.4695}
+                longitude={-80.5319}
+                offsetTop={48}
+                offsetLeft={38}
+                onClose={() => this.setState({ dronePopupInfo: null })}
+                closeOnClick={true}>
+                <p>{'Drone 1'}</p>
+            </Popup>
+        )
+    }
     
     //makes default 1 marker for detection array and then adds markers for all tracked drones
     render() {
         const { viewport } = this.state;
         const { items } = this.props;
-        console.log(this.props);
         var drones = items.trackingInfo.map(function(item){
             return <DroneMarker marker={item}/>;
         });
         return (
-            <MapGL
+            <div className="Map">
+            <MapGL 
                 {...viewport}
                 mapStyle="mapbox://styles/mapbox/streets-v11"
                 mapboxApiAccessToken={TOKEN}>
@@ -137,6 +137,7 @@ export default class Map extends Component {
                     {/* {this.state.dronePopupInfo ? this.renderDronePopup() : null} */}
                 </div>
             </MapGL>
+            </div>
         );
     }
 }

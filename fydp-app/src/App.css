@@ -23,6 +23,12 @@
 .App-link {
   color: #61dafb;
 }
+.Panel{
+  float: left;
+}
+.Map{
+  float: left;
+}
 
 @keyframes App-logo-spin {
   from {
