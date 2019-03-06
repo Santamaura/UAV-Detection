@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
-import items from './sample.json';
+// import items from './sample.json';
 import './App.css';
 import Map from './Map/Map.js';
 import Panel from './Panel/Panel.js';
@@ -23,14 +23,13 @@ componentWillUnmount() {
 }
 
 getItems() {
-  this.setState({items: items});
-    // fetch("http://192.168.3.4:5000/")
-    //     .then(result => result.json())
-    //     .then(result => this.setState({ items: result }))
-    //     .catch((error) => {
-    //       throw error;
-    //     });
-    // this.setState({isLoading: true});
+  // this.setState({items: items});
+    fetch("http://192.168.3.4:5000/")
+        .then(result => result.json())
+        .then(result => this.setState({ items: result }))
+        .catch((error) => {
+          throw error;
+        });
     console.log(this.state.items);
 }
 
