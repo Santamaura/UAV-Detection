@@ -47,7 +47,7 @@ export default class Map extends Component {
         this.renderDronePopup = this.renderDronePopup.bind(this);
     }
     renderUserPopup() {
-        const { systemLat, systemLon } = this.props.objects;
+        const { systemLat, systemLon } = this.props.items.systemStats;
         return (
             <Popup
                 tipSize={5}
