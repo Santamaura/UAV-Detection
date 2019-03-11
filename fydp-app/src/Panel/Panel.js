@@ -20,6 +20,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import { Divider } from '@material-ui/core';
+import { toggleDetected, addDetected, removeDetected } from '../Redux/actions';
+import store from '../Redux/store';
+import { connect } from 'react-redux';
 
 const DetectionItem = ({detectionItem}) => 
         <ListItem>
@@ -28,7 +31,7 @@ const DetectionItem = ({detectionItem}) =>
             </ListItemIcon>
             <ListItemText 
                 primary={`Estimated Distance: ${detectionItem.estimatedDistance.toFixed(3)} M`}
-                onClick={() => this.props.toggleDetected(detectionItem.freq)}
+                onClick={() => store.dispatch(toggleDetected(detectionItem.freq))}
             />
         </ListItem>;
 const TrackingItem = ({trackingItem, i}) =>
@@ -67,6 +70,13 @@ class Panel extends Component {
         open: true,
         showDetection: []
     };
+
+    componentDidMount() {
+      const { detectionInfo } = this.props.items;
+      detectionInfo.map(item => {
+        store.dispatch(addDetected({freq: item.freq, isVisible: false}))
+      })
+    }
     
     handleClick = () => {
         this.setState(state => ({ open: !state.open }));
@@ -145,4 +155,10 @@ class Panel extends Component {
     }
 }
 
-export default Panel;
+function mapStateToProps(state) {
+  return {
+    showDetections: state.showDetections
+  }
+}
+
+export default connect(mapStateToProps)(Panel);
