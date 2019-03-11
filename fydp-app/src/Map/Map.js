@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import MapGL, { Marker, Popup } from 'react-map-gl';
 import Pin from './Pin/Pin';
 import Rippling from './DetectedGif/Rippling';
+import Circle from './Circle/Circle';
 import styles from './styles.css';
+import store from '../Redux/store';
 
 const TOKEN = 'pk.eyJ1IjoiYWpzYW50YW0iLCJhIjoiY2pyZHpmNWt4MXUwZzQ0bndnMGw5MzRjMyJ9.Wun_Glz6UWIONCcdi61btQ';
 const DroneMarker = ({ marker }) => <Marker
@@ -27,6 +29,14 @@ const DroneMarker = ({ marker }) => <Marker
     </div>
 </Marker>;
 
+const DetectionCircle = ({ marker, origin }) => <Marker
+    latitude={origin.systemLat}
+    longitude={origin.systemLon}
+    offsetTop={-80}
+    offsetLeft={-136}>
+    <div><Circle radius={marker.estimatedDistance}/></div>
+</Marker>;
+
 export default class Map extends Component {
     constructor(props) {
         super(props);
@@ -41,10 +51,12 @@ export default class Map extends Component {
                 height:"100%"
             },
             userPopupInfo: false,
-            dronePopupInfo: false
+            dronePopupInfo: false,
+            detectedObjects: []
         };
         this.renderUserPopup = this.renderUserPopup.bind(this);
         this.renderDronePopup = this.renderDronePopup.bind(this);
+        this.handleStoreChange = this.handleStoreChange.bind(this);
     }
     renderUserPopup() {
         const { systemLat, systemLon } = this.props.items.systemStats;
@@ -78,14 +90,38 @@ export default class Map extends Component {
             </Popup>
         )
     }
+
+    handleStoreChange(storeArray) {
+        const { detectionInfo } = this.props.items;
+        let displayDetections = storeArray.showDetections.filter(function(stored) {
+            return stored.isVisible == true;
+        });
+        if(displayDetections == undefined) {
+            return null;
+        }
+        let returnDetections = [];
+        detectionInfo.forEach(item => displayDetections.forEach(comparer => {
+            return item.freq == comparer.freq ? returnDetections.push(item) : null
+        }));
+         this.setState({
+            detectedObjects: [...returnDetections]
+         });
+    }
     
     //makes default 1 marker for detection array and then adds markers for all tracked drones
     render() {
-        const { viewport } = this.state;
+        const { viewport, userPopupInfo, dronePopupInfo, detectedObjects } = this.state;
         const { items } = this.props;
         var drones = items.trackingInfo.map(function(item){
             return <DroneMarker marker={item}/>;
         });
+        let detectedDrones = detectedObjects.map(function(item) {
+            return <DetectionCircle marker={item} origin={items.systemStats} />;
+        })
+
+        store.subscribe(() => this.handleStoreChange(store.getState()))
+        
+        console.log(this.state.detectedObjects.length);
         return (
             <div className="Map">
             <MapGL 
@@ -104,37 +140,10 @@ export default class Map extends Component {
                             <Pin />
                         </div>
                     </Marker>
-                    {this.state.userPopupInfo ? this.renderUserPopup() : null}
+                    {userPopupInfo ? this.renderUserPopup() : null}
                     {drones}
-                    {this.state.dronePopupInfo ? this.renderDronePopup() : null}
-                    {/* <Marker
-                        latitude={43.4695}
-                        longitude={-80.5319}
-                        offsetTop={-50}
-                        offsetLeft={-100}>
-                        <div
-                            className={styles.pin}
-                            onClick={() => this.setState({ userPopupInfo: true })} >
-                            <Pin />
-                        </div>
-                    </Marker>
-                    {this.state.userPopupInfo ? this.renderUserPopup() : null}
-                    Object.keys(this.state.items).map(item => (
-                        <DroneMarker marker={item}/>
-                        {this.state.dronePopupInfo ? this.renderDronePopup() : null}
-                    )) */}
-                    {/* <DroneMarker marker={{lat: 43.4695, long: -80.5319, offTop: 0, offLeft: 0}} /> */}
-                        {/* latitude={43.4695}
-                        longitude={-80.5319}
-                        offsetTop={0}
-                        offsetLeft={0}>
-                        <div
-                            className={styles.pin}
-                            onClick={() => this.setState({ dronePopupInfo: true })}>
-                            <Rippling />
-                        </div>
-                    </Marker> */}
-                    {/* {this.state.dronePopupInfo ? this.renderDronePopup() : null} */}
+                    {detectedDrones}
+                    {dronePopupInfo ? this.renderDronePopup() : null}
                 </div>
             </MapGL>
             </div>

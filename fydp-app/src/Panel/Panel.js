@@ -85,7 +85,7 @@ class Panel extends Component {
     render() {
         const {systemStats, detectionInfo, trackingInfo} = this.props.items;
         var detections = detectionInfo.map(function(item){
-            return <DetectionItem detectionItem={item}/>;
+            return <DetectionItem className={styles.detections} detectionItem={item}/>;
         });
         var trackings = trackingInfo.map(function(item, i){
             return <TrackingItem trackingItem={item} i={i}/>;

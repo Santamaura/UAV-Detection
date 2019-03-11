@@ -6,3 +6,7 @@
     float:right;
     padding-top: 3%;
 }
+
+.detections :hover{
+    cursor: pointer;
+}
