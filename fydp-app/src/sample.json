@@ -1,20 +1,31 @@
 {
-	"detectionInfo": [{
-		"deviceType": "RC Controller",
-		"estimatedDistance": 3.013565525925849,
-		"freq": 2.445,
-		"lastSeen": 1551844621.955553,
-		"recivedDB": 0.11786594688892364
-	}],
-	"trackingInfo": [{
-		"estimatedAngle": 161,
-		"estimatedDistance": 25.1,
-		"estimatedLat": 43.4695,
-		"estimatedLon": -80.5319,
-		"freq": 1.102,
-		"lastSeen": 1550421514,
-		"recivedDB": 0.5689
-	}],
+	"detectionInfo": [
+		{
+			"deviceType": "RC Controller",
+			"estimatedDistance": 3.013565525925849,
+			"freq": 2.445,
+			"lastSeen": 1551844621.955553,
+			"receivedDB": 0.11786594688892364
+		},
+		{
+			"deviceType": "Flying pig",
+			"estimatedDistance": 3.083565525925849,
+			"freq": 2.11,
+			"lastSeen": 1561844621.955553,
+			"receivedDB": 0.18786594688892364
+		}
+	],
+	"trackingInfo": [
+		{
+			"estimatedAngle": 161,
+			"estimatedDistance": 25.1,
+			"estimatedLat": 43.4695,
+			"estimatedLon": -80.5319,
+			"freq": 1.102,
+			"lastSeen": 1550421514,
+			"receivedDB": 0.5689
+		}
+	],
 	"systemStats": {
 		"currentScanFreq": 0.954,
 		"currentTime": 1550421672,

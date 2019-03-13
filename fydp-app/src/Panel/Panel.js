@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import styles from './styles.css';
 import ListItem from '@material-ui/core/ListItem';
@@ -19,13 +20,19 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import { Divider } from '@material-ui/core';
+import { toggleDetected, addDetected, removeDetected } from '../Redux/actions';
+import store from '../Redux/store';
+import { connect } from 'react-redux';
 
 const DetectionItem = ({detectionItem}) => 
         <ListItem>
             <ListItemIcon>
                 <PortableWifiOffIcon/>
             </ListItemIcon>
-            <ListItemText primary={`Estimated Distance: ${detectionItem.estimatedDistance}`}/>
+            <ListItemText 
+                primary={`Estimated Distance: ${detectionItem.estimatedDistance.toFixed(3)} M`}
+                onClick={() => store.dispatch(toggleDetected(detectionItem.freq))}
+            />
         </ListItem>;
 const TrackingItem = ({trackingItem, i}) =>
 <div className="shiftedright">
@@ -55,23 +62,31 @@ const TrackingItem = ({trackingItem, i}) =>
     <ListItemText primary={`Estimated Longitude: ${trackingItem.estimatedLon}`}/>
 </ListItem>
 </div>;
-export default class Panel extends Component {
+class Panel extends Component {
+    constructor(props){
+        super(props);
+    }
     state = {
         open: true,
-      };
-    
-      handleClick = () => {
-        this.setState(state => ({ open: !state.open }));
-      };
-    
+        showDetection: []
+    };
 
+    componentDidMount() {
+      const { detectionInfo } = this.props.items;
+      detectionInfo.map(item => {
+        store.dispatch(addDetected({freq: item.freq, isVisible: false}))
+      })
+    }
+    
+    handleClick = () => {
+        this.setState(state => ({ open: !state.open }));
+    };
+    
     render() {
-        const systemStats = this.props.items.systemStats;
-        const detectionInfo = this.props.items.detectionInfo;
+        const {systemStats, detectionInfo, trackingInfo} = this.props.items;
         var detections = detectionInfo.map(function(item){
-            return <DetectionItem detectionItem={item}/>;
+            return <DetectionItem className={styles.detections} detectionItem={item}/>;
         });
-        const trackingInfo = this.props.items.trackingInfo;
         var trackings = trackingInfo.map(function(item, i){
             return <TrackingItem trackingItem={item} i={i}/>;
         });
@@ -85,12 +100,6 @@ export default class Panel extends Component {
               <ScannerIcon />
             </ListItemIcon>
             <ListItemText primary= {`Current Scanning Frequency: ${systemStats.currentScanFreq}`}/>
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <AccessTimeIcon />
-            </ListItemIcon>
-            <ListItemText primary={`Current Time: ${moment.unix(systemStats.currentTime).format("MM/DD/YYYY")}`} />
           </ListItem>
           <ListItem button>
             <ListItemIcon>
@@ -145,3 +154,11 @@ export default class Panel extends Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+  return {
+    showDetections: state.showDetections
+  }
+}
+
+export default connect(mapStateToProps)(Panel);
