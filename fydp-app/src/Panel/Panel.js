@@ -65,11 +65,11 @@ const TrackingItem = ({trackingItem, i}) =>
 class Panel extends Component {
     constructor(props){
         super(props);
+        this.state = {
+          open: true,
+          showDetection: []
+      };
     }
-    state = {
-        open: true,
-        showDetection: []
-    };
 
     componentDidMount() {
       const { detectionInfo } = this.props.items;
@@ -77,15 +77,36 @@ class Panel extends Component {
         store.dispatch(addDetected({freq: item.freq, isVisible: false}))
       })
     }
+
+    componentDidUpdate() {
+      const { items, showDetections } = this.props;
+      let compareDetections = function(otherArray) {
+          return function (current) {
+            return otherArray.filter(function (other) {
+              return other.freq == current.freq
+            }).length == 0;
+          }
+        }
+
+      if(items.detectionInfo.length > showDetections.length) {
+        let newDetection = items.detectionInfo.filter(compareDetections(showDetections));
+        store.dispatch(addDetected({freq: newDetection.freq, isVisible: false}))
+      }
+      else if(items.detectionInfo.length < showDetections.length) {
+        let oldDetection = showDetections.filter(compareDetections(items.detectionInfo));
+        store.dispatch(removeDetected({freq: oldDetection.freq}))
+      }
+    }
     
     handleClick = () => {
         this.setState(state => ({ open: !state.open }));
     };
+
     
     render() {
         const {systemStats, detectionInfo, trackingInfo} = this.props.items;
         var detections = detectionInfo.map(function(item){
-            return <DetectionItem className={styles.detections} detectionItem={item}/>;
+            return <DetectionItem detectionItem={item}/>;
         });
         var trackings = trackingInfo.map(function(item, i){
             return <TrackingItem trackingItem={item} i={i}/>;
