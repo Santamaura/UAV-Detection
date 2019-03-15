@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import MapGL, { Marker, Popup } from 'react-map-gl';
+import MapGL, { Marker, Popup, SVGOverlay } from 'react-map-gl';
 import Pin from './Pin/Pin';
 import Rippling from './DetectedGif/Rippling';
 import Circle from './Circle/Circle';
 import styles from './styles.css';
 import store from '../Redux/store';
+import Rectangle from './Rectangle/Rectangle.js';
+import * as d3 from 'd3';
+
+
 
 const TOKEN = 'pk.eyJ1IjoiYWpzYW50YW0iLCJhIjoiY2pyZHpmNWt4MXUwZzQ0bndnMGw5MzRjMyJ9.Wun_Glz6UWIONCcdi61btQ';
 const DroneMarker = ({ marker }) => <Marker
@@ -57,6 +61,8 @@ export default class Map extends Component {
         this.renderUserPopup = this.renderUserPopup.bind(this);
         this.renderDronePopup = this.renderDronePopup.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
+        this.onClickMap = this.onClickMap.bind(this);
+        this.drawRect = this.drawRect.bind(this);
     }
     renderUserPopup() {
         const { systemLat, systemLon } = this.props.items.systemStats;
@@ -90,6 +96,10 @@ export default class Map extends Component {
             </Popup>
         )
     }
+    redraw({project}) {
+        const [cx, cy] = project([-80.5319, 43.4695]);
+        return <circle cx={cx} cy={cy} r={4} fill="blue" />;
+      }
 
     handleStoreChange(storeArray) {
         const { detectionInfo } = this.props.items;
@@ -106,6 +116,10 @@ export default class Map extends Component {
          this.setState({
             detectedObjects: [...returnDetections]
          });
+    }
+    onClickMap(evt) {
+        console.log("LSLDSAFASDA");
+        console.log(evt.lngLat);
     }
     
     //makes default 1 marker for detection array and then adds markers for all tracked drones
@@ -127,7 +141,8 @@ export default class Map extends Component {
             <MapGL 
                 {...viewport}
                 mapStyle="mapbox://styles/mapbox/streets-v11"
-                mapboxApiAccessToken={TOKEN}>
+                mapboxApiAccessToken={TOKEN}
+                onClick={this.onClickMap}>
                 <div className={styles.navStyle}>
                     <Marker
                         latitude={items.systemStats.systemLat}
@@ -145,7 +160,13 @@ export default class Map extends Component {
                     {detectedDrones}
                     {dronePopupInfo ? this.renderDronePopup() : null}
                 </div>
+                <SVGOverlay redraw={this.redraw}>
+                    {/* <div id={"rectangle"}>
+                    </div>; */}
+                </SVGOverlay>
             </MapGL>
+            
+            {/* <Rectangle></Rectangle> */}
             </div>
         );
     }

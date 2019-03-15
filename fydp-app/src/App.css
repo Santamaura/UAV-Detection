@@ -35,6 +35,20 @@
   bottom: 0;
   margin-left: 340px;
 }
+#rectangle{
+  width: 80vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+}
+.detectionform{
+  z-index: 100000;
+  position: relative;
+  margin-left: 10%;
+  margin-top: 0;
+  float: left;
+}
 
 @keyframes App-logo-spin {
   from {
