@@ -6,6 +6,7 @@ import Circle from './Circle/Circle';
 import styles from './styles.css';
 import store from '../Redux/store';
 import Rectangle from './Rectangle/Rectangle.js';
+import Modal from '@material-ui/core/Modal';
 // import MapState from 'react-map-gl';
 import * as d3 from 'd3';
 
@@ -42,6 +43,15 @@ const DetectionCircle = ({ marker, origin }) => <Marker
     <div><Circle radius={marker.estimatedDistance}/></div>
 </Marker>;
 
+const detectedStyle = {
+    fill: 'red',
+  opacity: 0.3
+}
+const undetectedStyle = {
+    fill: 'green',
+    opacity: 0.3
+}
+
 export default class Map extends Component {
     constructor(props) {
         super(props);
@@ -57,6 +67,7 @@ export default class Map extends Component {
             },
             userPopupInfo: false,
             dronePopupInfo: false,
+            withinGeoFence: false,
             detectedObjects: []
         };
         this.renderUserPopup = this.renderUserPopup.bind(this);
@@ -99,6 +110,22 @@ export default class Map extends Component {
     }
     bounds(project) {
         console.log(project);
+        const { trackingInfo } = this.props.items;
+        this.setState({
+            withinGeoFence: false
+        })
+        trackingInfo.forEach(trackedItem => {
+            console.log(trackedItem.estimatedLat, trackedItem.estimatedLon);
+            if(trackedItem.estimatedLat < project[0][1] && 
+                trackedItem.estimatedLon > project[0][0] && 
+                trackedItem.estimatedLat > project[1][1] &&
+                trackedItem.estimatedLon < project[1][0]) {
+                    console.log('HITT');
+                    this.setState({
+                        withinGeoFence: true
+                    })
+            }
+        })
       }
 
     handleStoreChange(storeArray) {
@@ -124,7 +151,7 @@ export default class Map extends Component {
     
     //makes default 1 marker for detection array and then adds markers for all tracked drones
     render() {
-        const { viewport, userPopupInfo, dronePopupInfo, detectedObjects } = this.state;
+        const { viewport, userPopupInfo, dronePopupInfo, detectedObjects, withinGeoFence } = this.state;
         const { items } = this.props;
         var drones = items.trackingInfo.map(function(item){
             return <DroneMarker marker={item}/>;
@@ -135,7 +162,7 @@ export default class Map extends Component {
 
         store.subscribe(() => this.handleStoreChange(store.getState()))
         
-        console.log(this.state.detectedObjects.length);
+        console.log(withinGeoFence);
         return (
             <div className="Map">
             <MapGL 
@@ -160,7 +187,14 @@ export default class Map extends Component {
                     {detectedDrones}
                     {dronePopupInfo ? this.renderDronePopup() : null}
                 </div>
-                <Rectangle callback={this.bounds}></Rectangle>
+                {withinGeoFence ? 
+                    <Rectangle 
+                        callback={this.bounds} 
+                        style={detectedStyle}>
+                    </Rectangle> 
+                    :
+                    <Rectangle style={undetectedStyle} callback={this.bounds}></Rectangle>
+                    }
             </MapGL>
             
             
