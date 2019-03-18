@@ -25,7 +25,9 @@ export class Rectangle extends BaseControl {
             .attr("height", 10000)
             .on("mousedown", function(){
                 var m = d3.mouse(this);
-                svg.select("rect").remove();
+                if(rect){
+                    rect.remove();
+                }
                 rect = svg.append("rect")
                     .attr("x", m[0])
                     .attr("y", m[1])
@@ -49,7 +51,7 @@ export class Rectangle extends BaseControl {
     }
     _render() {
         return <div id={"rectangle"}>
-                </div>;
+         </div>;
     }
 }
 
