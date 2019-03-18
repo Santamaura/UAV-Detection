@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import MapGL, { Marker, Popup, SVGOverlay } from 'react-map-gl';
+import MapGL, { Marker, Popup, MapState } from 'react-map-gl';
 import Pin from './Pin/Pin';
 import Rippling from './DetectedGif/Rippling';
 import Circle from './Circle/Circle';
 import styles from './styles.css';
 import store from '../Redux/store';
 import Rectangle from './Rectangle/Rectangle.js';
+// import MapState from 'react-map-gl';
 import * as d3 from 'd3';
 
 
@@ -62,7 +63,7 @@ export default class Map extends Component {
         this.renderDronePopup = this.renderDronePopup.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
         this.onClickMap = this.onClickMap.bind(this);
-        this.drawRect = this.drawRect.bind(this);
+        this.bounds = this.bounds.bind(this);
     }
     renderUserPopup() {
         const { systemLat, systemLon } = this.props.items.systemStats;
@@ -96,9 +97,8 @@ export default class Map extends Component {
             </Popup>
         )
     }
-    redraw({project}) {
-        const [cx, cy] = project([-80.5319, 43.4695]);
-        return <circle cx={cx} cy={cy} r={4} fill="blue" />;
+    bounds(project) {
+        console.log(project);
       }
 
     handleStoreChange(storeArray) {
@@ -160,13 +160,10 @@ export default class Map extends Component {
                     {detectedDrones}
                     {dronePopupInfo ? this.renderDronePopup() : null}
                 </div>
-                <SVGOverlay redraw={this.redraw}>
-                    {/* <div id={"rectangle"}>
-                    </div>; */}
-                </SVGOverlay>
+                <Rectangle callback={this.bounds}></Rectangle>
             </MapGL>
             
-            {/* <Rectangle></Rectangle> */}
+            
             </div>
         );
     }
