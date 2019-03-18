@@ -31,7 +31,6 @@ export class Rectangle extends BaseControl {
                     .attr("y", m[1])
                     .attr("height", 0)
                     .attr("width", 0);
-                    // console.log(rect.x.baseVal.value);
     
                 svg.on("mousemove", function(){
                     var m = d3.mouse(this);
@@ -39,7 +38,6 @@ export class Rectangle extends BaseControl {
                     rect.attr("width", Math.max(0, m[0] - +rect.attr("x")))
                         .attr("height", Math.max(0, m[1] - +rect.attr("y")));
                     
-                    // console.log(rect.x.baseVal.value);
                 });
             })
             .on("mouseup", function() {
@@ -48,7 +46,6 @@ export class Rectangle extends BaseControl {
                 callback(points);
             });
         
-        // () => this.props.redraw(rect.)
     }
     _render() {
         return <div id={"rectangle"}>
