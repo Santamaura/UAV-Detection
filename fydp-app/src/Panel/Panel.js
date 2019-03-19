@@ -30,7 +30,8 @@ const DetectionItem = ({detectionItem}) =>
                 <PortableWifiOffIcon/>
             </ListItemIcon>
             <ListItemText 
-                primary={`Estimated Distance: ${detectionItem.estimatedDistance.toFixed(3)} M`}
+                primary={`Est. Distance: ${detectionItem.estimatedDistance.toFixed(3)} M`}
+                class="detections"
                 onClick={() => store.dispatch(toggleDetected(detectionItem.freq))}
             />
         </ListItem>;
@@ -41,25 +42,25 @@ const TrackingItem = ({trackingItem, i}) =>
     <ListItemIcon>
         <WifiTetheringIcon/>
     </ListItemIcon>
-    <ListItemText primary={`Estimated Distance: ${trackingItem.estimatedDistance}`}/>
+    <ListItemText primary={`Est. Distance: ${trackingItem.estimatedDistance} M`}/>
 </ListItem>
 <ListItem>
     <ListItemIcon>
         <WifiTetheringIcon/>
     </ListItemIcon>
-    <ListItemText primary={`Estimated Angle: ${trackingItem.estimatedAngle}`}/>
+    <ListItemText primary={`Est. Angle: ${trackingItem.estimatedAngle} °`}/>
 </ListItem>
 <ListItem>
     <ListItemIcon>
         <WifiTetheringIcon/>
     </ListItemIcon>
-    <ListItemText primary={`Estimated Latitude: ${trackingItem.estimatedLat}`}/>
+    <ListItemText primary={`Est. Latitude: ${trackingItem.estimatedLat}`}/>
 </ListItem>
 <ListItem>
     <ListItemIcon>
         <WifiTetheringIcon/>
     </ListItemIcon>
-    <ListItemText primary={`Estimated Longitude: ${trackingItem.estimatedLon}`}/>
+    <ListItemText primary={`Est. Longitude: ${trackingItem.estimatedLon}`}/>
 </ListItem>
 </div>;
 class Panel extends Component {
@@ -114,19 +115,31 @@ class Panel extends Component {
         // items in detection and tracking need to be looped
         return (
         <List component="nav">
-        <ListSubheader>System Status</ListSubheader>
+          <ListSubheader component="div">Detection Info</ListSubheader>
+          {detections}
+          <Divider />
+          <ListSubheader button onClick={this.handleClick}>
+          Tracking Info
+          {this.state.open ? <ExpandLess className="subheaderdropdown"/> : <ExpandMore className="subheaderdropdown"/>}
+          </ListSubheader>
+          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+          {trackings}
+          </List>
+          </Collapse>
+          <ListSubheader>System Status</ListSubheader>
         <Divider/>
           <ListItem>
             <ListItemIcon>
               <ScannerIcon />
             </ListItemIcon>
-            <ListItemText primary= {`Current Scanning Frequency: ${systemStats.currentScanFreq}`}/>
+            <ListItemText primary= {`Scanning Freq.: ${systemStats.currentScanFreq} GHz`}/>
           </ListItem>
           <ListItem button>
             <ListItemIcon>
               <TrackingChangesIcon />
             </ListItemIcon>
-            <ListItemText primary={`Current Tracking Frequency: ${systemStats.currentTrackFreq}`} />
+            <ListItemText primary={`Tracking Freq.: ${systemStats.currentTrackFreq} GHz`} />
           </ListItem>
           <ListItem button>
             <ListItemIcon>
@@ -159,18 +172,6 @@ class Panel extends Component {
             <ListItemText primary={`Uptime: ${systemStats.uptime}`}/>
           </ListItem>
           <Divider />
-          <ListSubheader component="div">Detection Info</ListSubheader>
-          {detections}
-          <Divider />
-          <ListSubheader button onClick={this.handleClick}>
-          Tracking Info
-          {this.state.open ? <ExpandLess className="subheaderdropdown"/> : <ExpandMore className="subheaderdropdown"/>}
-          </ListSubheader>
-          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-          {trackings}
-          </List>
-          </Collapse>
           </List>
         )
     }
