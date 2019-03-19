@@ -18,8 +18,6 @@ export class Rectangle extends BaseControl {
         return [this._context.viewport.unproject([x0, y0]),this._context.viewport.unproject([x1, y1])];
     }
     changeColour(style){
-        console.log(style);
-        console.log("///////////")
         if(rect){
             rect.attr("fill", style.fill);
         }
