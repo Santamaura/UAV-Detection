@@ -25,14 +25,13 @@ import store from '../Redux/store';
 import { connect } from 'react-redux';
 
 const DetectionItem = ({detectionItem}) => 
-        <ListItem>
+        <ListItem onClick={() => store.dispatch(toggleDetected(detectionItem.freq))}>
             <ListItemIcon>
                 <PortableWifiOffIcon/>
             </ListItemIcon>
             <ListItemText 
                 primary={`Est. Distance: ${detectionItem.estimatedDistance.toFixed(3)} M`}
                 class="detections"
-                onClick={() => store.dispatch(toggleDetected(detectionItem.freq))}
             />
         </ListItem>;
 const TrackingItem = ({trackingItem, i}) =>

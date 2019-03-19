@@ -36,10 +36,10 @@ const DroneMarker = ({ marker }) => <Marker
 </Marker>;
 
 const DetectionCircle = ({ marker, origin }) => <Marker
-latitude={origin.systemLat}
-longitude={origin.systemLon}
-offsetTop={-105}
-offsetLeft={-145}>
+latitude={origin.systemLat+0.00003}
+longitude={origin.systemLon-0.00003}
+offsetTop={-210}
+offsetLeft={-260}>
 <div><Circle radius={marker.estimatedDistance}/></div>
 </Marker>;
 
@@ -113,13 +113,6 @@ export default class Map extends Component {
             withinGeoFence: false
         })
         trackingInfo.forEach(trackedItem => {
-            // console.log(trackedItem.estimatedLat, trackedItem.estimatedLon);
-            // console.log(project[0][1]);
-            // console.log(trackedItem.estimatedLat < project[0][1]);
-            // console.log(trackedItem.estimatedLon > project[0][0]);
-            // console.log(trackedItem.estimatedLat > project[1][1]);
-            // console.log(trackedItem.estimatedLon < project[1][0]);
-            // trackedItem.estimatedLat < project[0][1] && 
             if(trackedItem.estimatedLat < project[0][1] && 
                 trackedItem.estimatedLon > project[0][0] && 
                 trackedItem.estimatedLat > project[1][1] &&
@@ -157,8 +150,7 @@ export default class Map extends Component {
             return <DroneMarker marker={item}/>;
         });
         var detectedDrones = detectedObjects.map(function(item) {
-                return <DetectionCircle marker={item} origin={items.systemStats} />;
-            
+            return <DetectionCircle marker={item} origin={items.systemStats} />;
         })
 
         store.subscribe(() => this.handleStoreChange(store.getState()))
