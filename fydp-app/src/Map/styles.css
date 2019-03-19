@@ -16,7 +16,6 @@
 .tracked :hover {
   display: block;
 }
-
 rect {
   fill: green;
   opacity: 0.3;
