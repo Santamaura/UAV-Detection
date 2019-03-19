@@ -174,8 +174,8 @@ export default class Map extends Component {
                     <Marker
                         latitude={items.systemStats.systemLat}
                         longitude={items.systemStats.systemLon}
-                        offsetTop={-50}
-                        offsetLeft={-100}>
+                        offsetTop={-58}
+                        offsetLeft={-98}>
                         <div
                             className={styles.pin}
                             onClick={() => this.setState({ userPopupInfo: true })} >

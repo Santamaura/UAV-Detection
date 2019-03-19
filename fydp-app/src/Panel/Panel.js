@@ -157,13 +157,13 @@ class Panel extends Component {
             <ListItemIcon>
               <LocationIcon />
             </ListItemIcon>
-            <ListItemText primary={`System Latitude: ${systemStats.systemLat}`} />
+            <ListItemText primary={`Latitude: ${systemStats.systemLat}`} />
           </ListItem>
           <ListItem button>
             <ListItemIcon>
               <LocationIcon />
             </ListItemIcon>
-            <ListItemText primary={`System Longitude: ${systemStats.systemLon}`} />
+            <ListItemText primary={`Longitude: ${systemStats.systemLon}`} />
           </ListItem>
           <ListItem button>
             <ListItemIcon>
