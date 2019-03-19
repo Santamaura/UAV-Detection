@@ -36,11 +36,11 @@ const DroneMarker = ({ marker }) => <Marker
 </Marker>;
 
 const DetectionCircle = ({ marker, origin }) => <Marker
-    latitude={origin.systemLat}
-    longitude={origin.systemLon}
-    offsetTop={-80}
-    offsetLeft={-136}>
-    <div><Circle radius={marker.estimatedDistance}/></div>
+latitude={origin.systemLat}
+longitude={origin.systemLon}
+offsetTop={-105}
+offsetLeft={-145}>
+<div><Circle radius={marker.estimatedDistance}/></div>
 </Marker>;
 
 const detectedStyle = {
@@ -59,7 +59,7 @@ export default class Map extends Component {
             viewport: {
                 latitude: this.props.items.systemStats.systemLat, 
                 longitude: this.props.items.systemStats.systemLon, 
-                zoom: 18.55,
+                zoom: 19,
                 bearing: 0,
                 pitch: 0,
                 width:"100%",
@@ -73,7 +73,6 @@ export default class Map extends Component {
         this.renderUserPopup = this.renderUserPopup.bind(this);
         this.renderDronePopup = this.renderDronePopup.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
-        this.onClickMap = this.onClickMap.bind(this);
         this.bounds = this.bounds.bind(this);
     }
     renderUserPopup() {
@@ -109,13 +108,18 @@ export default class Map extends Component {
         )
     }
     bounds(project) {
-        console.log(project);
         const { trackingInfo } = this.props.items;
         this.setState({
             withinGeoFence: false
         })
         trackingInfo.forEach(trackedItem => {
-            console.log(trackedItem.estimatedLat, trackedItem.estimatedLon);
+            // console.log(trackedItem.estimatedLat, trackedItem.estimatedLon);
+            // console.log(project[0][1]);
+            // console.log(trackedItem.estimatedLat < project[0][1]);
+            // console.log(trackedItem.estimatedLon > project[0][0]);
+            // console.log(trackedItem.estimatedLat > project[1][1]);
+            // console.log(trackedItem.estimatedLon < project[1][0]);
+            // trackedItem.estimatedLat < project[0][1] && 
             if(trackedItem.estimatedLat < project[0][1] && 
                 trackedItem.estimatedLon > project[0][0] && 
                 trackedItem.estimatedLat > project[1][1] &&
@@ -144,10 +148,6 @@ export default class Map extends Component {
             detectedObjects: [...returnDetections]
          });
     }
-    onClickMap(evt) {
-        console.log("LSLDSAFASDA");
-        console.log(evt.lngLat);
-    }
     
     //makes default 1 marker for detection array and then adds markers for all tracked drones
     render() {
@@ -156,20 +156,19 @@ export default class Map extends Component {
         var drones = items.trackingInfo.map(function(item){
             return <DroneMarker marker={item}/>;
         });
-        let detectedDrones = detectedObjects.map(function(item) {
-            return <DetectionCircle marker={item} origin={items.systemStats} />;
+        var detectedDrones = detectedObjects.map(function(item) {
+                return <DetectionCircle marker={item} origin={items.systemStats} />;
+            
         })
 
         store.subscribe(() => this.handleStoreChange(store.getState()))
         
-        console.log(withinGeoFence);
         return (
             <div className="Map">
             <MapGL 
                 {...viewport}
                 mapStyle="mapbox://styles/mapbox/streets-v11"
-                mapboxApiAccessToken={TOKEN}
-                onClick={this.onClickMap}>
+                mapboxApiAccessToken={TOKEN}>
                 <div className={styles.navStyle}>
                     <Marker
                         latitude={items.systemStats.systemLat}

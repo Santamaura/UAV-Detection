@@ -61,7 +61,6 @@ getItems() {
 
   render() {
     const {items} = this.state;
-    console.log(items);
 
     if(Object.entries(items).length === 0 && items.constructor === Object) {
       return <p>Loading...</p>;
