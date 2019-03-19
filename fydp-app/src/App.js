@@ -81,7 +81,7 @@ getItems() {
           </Drawer>
         </div>
         <Map className="Map" items={items} detectionRadius={this.state.radiusVal}/>
-        <div className="detectionform">
+        {/* <div className="detectionform">
           <form onSubmit={this.handleSubmit} style={{marginTop: '0'}} >
             <TextField
               id="standard-name"
@@ -91,7 +91,7 @@ getItems() {
               margin="none"
             />
           </form>
-        </div>
+        </div> */}
       </div>
     );
   }
