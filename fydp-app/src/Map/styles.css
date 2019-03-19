@@ -16,3 +16,11 @@
 .tracked :hover {
   display: block;
 }
+/* rect {
+  fill: green;
+  opacity: 0.3;
+}
+rect.detected{
+  fill: red;
+  opacity: 0.3;
+} */

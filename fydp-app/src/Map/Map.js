@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import MapGL, { Marker, Popup } from 'react-map-gl';
+import MapGL, { Marker, Popup, MapState } from 'react-map-gl';
 import Pin from './Pin/Pin';
 import Rippling from './DetectedGif/Rippling';
 import Circle from './Circle/Circle';
 import styles from './styles.css';
 import store from '../Redux/store';
+import Rectangle from './Rectangle/Rectangle.js';
+import Modal from '@material-ui/core/Modal';
+// import MapState from 'react-map-gl';
+import * as d3 from 'd3';
+
+
 
 const TOKEN = 'pk.eyJ1IjoiYWpzYW50YW0iLCJhIjoiY2pyZHpmNWt4MXUwZzQ0bndnMGw5MzRjMyJ9.Wun_Glz6UWIONCcdi61btQ';
 const DroneMarker = ({ marker }) => <Marker
@@ -37,6 +43,15 @@ const DetectionCircle = ({ marker, origin }) => <Marker
     <div><Circle radius={marker.estimatedDistance}/></div>
 </Marker>;
 
+const detectedStyle = {
+    fill: 'red',
+  opacity: 0.3
+}
+const undetectedStyle = {
+    fill: 'green',
+    opacity: 0.3
+}
+
 export default class Map extends Component {
     constructor(props) {
         super(props);
@@ -52,11 +67,14 @@ export default class Map extends Component {
             },
             userPopupInfo: false,
             dronePopupInfo: false,
+            withinGeoFence: false,
             detectedObjects: []
         };
         this.renderUserPopup = this.renderUserPopup.bind(this);
         this.renderDronePopup = this.renderDronePopup.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
+        this.onClickMap = this.onClickMap.bind(this);
+        this.bounds = this.bounds.bind(this);
     }
     renderUserPopup() {
         const { systemLat, systemLon } = this.props.items.systemStats;
@@ -90,6 +108,25 @@ export default class Map extends Component {
             </Popup>
         )
     }
+    bounds(project) {
+        console.log(project);
+        const { trackingInfo } = this.props.items;
+        this.setState({
+            withinGeoFence: false
+        })
+        trackingInfo.forEach(trackedItem => {
+            console.log(trackedItem.estimatedLat, trackedItem.estimatedLon);
+            if(trackedItem.estimatedLat < project[0][1] && 
+                trackedItem.estimatedLon > project[0][0] && 
+                trackedItem.estimatedLat > project[1][1] &&
+                trackedItem.estimatedLon < project[1][0]) {
+                    console.log('HITT');
+                    this.setState({
+                        withinGeoFence: true
+                    })
+            }
+        })
+      }
 
     handleStoreChange(storeArray) {
         const { detectionInfo } = this.props.items;
@@ -107,10 +144,14 @@ export default class Map extends Component {
             detectedObjects: [...returnDetections]
          });
     }
+    onClickMap(evt) {
+        console.log("LSLDSAFASDA");
+        console.log(evt.lngLat);
+    }
     
     //makes default 1 marker for detection array and then adds markers for all tracked drones
     render() {
-        const { viewport, userPopupInfo, dronePopupInfo, detectedObjects } = this.state;
+        const { viewport, userPopupInfo, dronePopupInfo, detectedObjects, withinGeoFence } = this.state;
         const { items } = this.props;
         var drones = items.trackingInfo.map(function(item){
             return <DroneMarker marker={item}/>;
@@ -121,19 +162,20 @@ export default class Map extends Component {
 
         store.subscribe(() => this.handleStoreChange(store.getState()))
         
-        console.log(this.state.detectedObjects.length);
+        console.log(withinGeoFence);
         return (
             <div className="Map">
             <MapGL 
                 {...viewport}
                 mapStyle="mapbox://styles/mapbox/streets-v11"
-                mapboxApiAccessToken={TOKEN}>
+                mapboxApiAccessToken={TOKEN}
+                onClick={this.onClickMap}>
                 <div className={styles.navStyle}>
                     <Marker
                         latitude={items.systemStats.systemLat}
                         longitude={items.systemStats.systemLon}
-                        offsetTop={-50}
-                        offsetLeft={-100}>
+                        offsetTop={-58}
+                        offsetLeft={-98}>
                         <div
                             className={styles.pin}
                             onClick={() => this.setState({ userPopupInfo: true })} >
@@ -145,7 +187,17 @@ export default class Map extends Component {
                     {detectedDrones}
                     {dronePopupInfo ? this.renderDronePopup() : null}
                 </div>
+                {withinGeoFence ? 
+                    <Rectangle 
+                        callback={this.bounds} 
+                        style={detectedStyle}>
+                    </Rectangle> 
+                    :
+                    <Rectangle style={undetectedStyle} callback={this.bounds}></Rectangle>
+                    }
             </MapGL>
+            
+            
             </div>
         );
     }

@@ -1,0 +1,11 @@
+svg {
+    float: left;
+    border-bottom: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+    margin-right: -1px;
+    margin-bottom: -1px;
+}
+
+rect {
+    opacity: 0.2;
+}
