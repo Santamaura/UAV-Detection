@@ -32,7 +32,7 @@ const DetectionItem = ({detectionItem, i}) =>
         <PortableWifiOffIcon />
       </ListItemIcon>
       <ListItemText
-        primary={`Frequency: ${detectionItem.estimatedDistance.toFixed(3)} M`}
+        primary={`Est. Distance: ${detectionItem.estimatedDistance.toFixed(3)} M`}
         class="detections"
         onClick={() => store.dispatch(toggleDetected(detectionItem.freq))}
       />
@@ -42,7 +42,7 @@ const DetectionItem = ({detectionItem, i}) =>
         <PortableWifiOffIcon />
       </ListItemIcon>
       <ListItemText
-        primary={`Est. Distance: ${detectionItem.freq} GHz`}
+        primary={`Freq: ${detectionItem.freq} GHz`}
         class="detections"
       />
     </ListItem>
