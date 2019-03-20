@@ -24,16 +24,29 @@ import { toggleDetected, addDetected, removeDetected } from '../Redux/actions';
 import store from '../Redux/store';
 import { connect } from 'react-redux';
 
-const DetectionItem = ({detectionItem}) => 
-        <ListItem onClick={() => store.dispatch(toggleDetected(detectionItem.freq))}>
-            <ListItemIcon>
-                <PortableWifiOffIcon/>
-            </ListItemIcon>
-            <ListItemText 
-                primary={`Est. Distance: ${detectionItem.estimatedDistance.toFixed(3)} M`}
-                class="detections"
-            />
-        </ListItem>;
+const DetectionItem = ({detectionItem, i}) => 
+<div className="shiftedright">
+    <ListSubheader>{detectionItem.deviceType}</ListSubheader>
+    <ListItem>
+      <ListItemIcon>
+        <PortableWifiOffIcon />
+      </ListItemIcon>
+      <ListItemText
+        primary={`Est. Distance: ${detectionItem.estimatedDistance.toFixed(3)} M`}
+        class="detections"
+        onClick={() => store.dispatch(toggleDetected(detectionItem.freq))}
+      />
+    </ListItem>
+    <ListItem>
+      <ListItemIcon>
+        <PortableWifiOffIcon />
+      </ListItemIcon>
+      <ListItemText
+        primary={`Freq: ${detectionItem.freq} GHz`}
+        class="detections"
+      />
+    </ListItem>
+  </div>;
 const TrackingItem = ({trackingItem, i}) =>
 <div className="shiftedright">
 <ListSubheader>Drone {i+1}</ListSubheader>
@@ -105,8 +118,8 @@ class Panel extends Component {
     
     render() {
         const {systemStats, detectionInfo, trackingInfo} = this.props.items;
-        var detections = detectionInfo.map(function(item){
-            return <DetectionItem detectionItem={item}/>;
+        var detections = detectionInfo.map(function(item, i){
+            return <DetectionItem detectionItem={item} i={i}/>;
         });
         var trackings = trackingInfo.map(function(item, i){
             return <TrackingItem trackingItem={item} i={i}/>;

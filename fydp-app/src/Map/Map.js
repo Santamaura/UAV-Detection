@@ -156,7 +156,8 @@ export default class Map extends Component {
             <MapGL 
                 {...viewport}
                 mapStyle="mapbox://styles/mapbox/streets-v11"
-                mapboxApiAccessToken={TOKEN}>
+                mapboxApiAccessToken={TOKEN}
+                >
                 <div className={styles.navStyle}>
                     <Marker
                         latitude={items.systemStats.systemLat}
