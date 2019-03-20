@@ -56,13 +56,11 @@ getItems() {
     //     .catch((error) => {
     //       throw error;
     //     });
-    // this.setState({isLoading: true});
     console.log(this.state.items);
 }
 
   render() {
     const {items} = this.state;
-    console.log(items);
 
     if(Object.entries(items).length === 0 && items.constructor === Object) {
       return <p>Loading...</p>;
@@ -81,7 +79,7 @@ getItems() {
           </Drawer>
         </div>
         <Map className="Map" items={items} detectionRadius={this.state.radiusVal}/>
-        <div className="detectionform">
+        {/* <div className="detectionform">
           <form onSubmit={this.handleSubmit} style={{marginTop: '0'}} >
             <TextField
               id="standard-name"
@@ -91,7 +89,7 @@ getItems() {
               margin="none"
             />
           </form>
-        </div>
+        </div> */}
       </div>
     );
   }

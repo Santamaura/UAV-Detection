@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 
 const DetectionItem = ({detectionItem, i}) => 
 <div className="shiftedright">
-    <ListSubheader>Detection {i+1}</ListSubheader>
+    <ListSubheader>{detectionItem.deviceType}</ListSubheader>
     <ListItem>
       <ListItemIcon>
         <PortableWifiOffIcon />

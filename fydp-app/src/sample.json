@@ -1,38 +1,41 @@
 {
-	"detectionInfo": [
-		{
-			"deviceType": "RC Controller",
-			"estimatedDistance": 3.013565525925849,
-			"freq": 2.445,
-			"lastSeen": 1551844621.955553,
-			"receivedDB": 0.11786594688892364
-		},
-		{
-			"deviceType": "Flying pig",
-			"estimatedDistance": 3.083565525925849,
-			"freq": 2.11,
-			"lastSeen": 1561844621.955553,
-			"receivedDB": 0.18786594688892364
-		}
-	],
-	"trackingInfo": [
-		{
-			"estimatedAngle": 161,
-			"estimatedDistance": 25.1,
-			"estimatedLat": 43.46951,
-			"estimatedLon": -80.53195,
-			"freq": 1.102,
-			"lastSeen": 1550421514,
-			"receivedDB": 0.5689
-		}
-	],
+	"detectionInfo": [{
+		"deviceType": "RC Controller",
+		"estimatedDistance": 8.138539296734557,
+		"freq": 2.445,
+		"lastSeen": 1553024411.372216,
+		"recivedDB": 0.02891217768192291,
+		"variance": 0.00012159751440011927
+	}, {
+		"deviceType": "Video Transmitter",
+		"estimatedDistance": 1.2932384580045835,
+		"freq": 1.2,
+		"lastSeen": 1553024267.20141,
+		"recivedDB": 0.758627986907959,
+		"variance": 0.012175944126780962
+	}],
 	"systemStats": {
-		"currentScanFreq": 0.954,
-		"currentTime": 1550421672,
-		"currentTrackFreq": 1.102,
-		"systemLat": 43.469407,
-		"systemLon": -80.531794,
+		"connectedGNURadio": false,
+		"connectedGPS": false,
+		"connectedKerberos": true,
+		"currentScanFreq": 1.12,
+		"currentTime": 1553024608.235849,
+		"currentTrackFreq": 0,
+		"flowgraphVersion": 0.1,
 		"softwareVersion": 0.1,
-		"uptime": 2826
-	}
+		"systemLat": 43.4728707,
+		"systemLon": -80.5394302,
+		"uptime": 565.1002089977264
+	},
+	"trackingInfo": [{
+		"deviceType": "Video Transmitter",
+		"estimatedAngle": 9.0,
+		"estimatedDistance": 1.2932384580045835,
+		"estimatedLat": 43.472951686040886,
+		"estimatedLon": -80.53942768959075,
+		"freq": 1.2,
+		"lastSeen": 1553024592.602213,
+		"recivedDB": 0.758627986907959,
+		"variance": 0.0
+	}]
 }
