@@ -24,14 +24,14 @@ const DroneMarker = ({ marker }) => <Marker
         <Rippling />
     </div>
     <div className={styles.tracked}>
-        <Popup
+        {/* <Popup
             tipsize={5}
             anchor="top"
             latitude={marker.estimatedLat}
             longitude={marker.estimatedLon}
             offsetTop={48}
             offsetLeft={38}
-        />
+        /> */}
     </div>
 </Marker>;
 
@@ -43,14 +43,6 @@ offsetLeft={-260}>
 <div><Circle radius={marker.estimatedDistance}/></div>
 </Marker>;
 
-const detectedStyle = {
-    fill: 'red',
-  opacity: 0.3
-}
-const undetectedStyle = {
-    fill: 'green',
-    opacity: 0.3
-}
 
 export default class Map extends Component {
     constructor(props) {
@@ -70,49 +62,53 @@ export default class Map extends Component {
             withinGeoFence: false,
             detectedObjects: []
         };
-        this.renderUserPopup = this.renderUserPopup.bind(this);
-        this.renderDronePopup = this.renderDronePopup.bind(this);
+        // this.renderUserPopup = this.renderUserPopup.bind(this);
+        // this.renderDronePopup = this.renderDronePopup.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
         this.bounds = this.bounds.bind(this);
     }
-    renderUserPopup() {
-        const { systemLat, systemLon } = this.props.items.systemStats;
-        return (
-            <Popup
-                tipSize={5}
-                anchor="top"
-                latitude={systemLat}
-                longitude={systemLon}
-                offsetTop={-22}
-                offsetLeft={-88}
-                onClose={() => this.setState({ userPopupInfo: null })}
-                closeOnClick={true}>
-                <p>{'Detection array is here'}</p>
-            </Popup>
-        )
-    }
+    // renderUserPopup() {
+    //     const { systemLat, systemLon } = this.props.items.systemStats;
+    //     return (
+    //         <Popup
+    //             tipSize={5}
+    //             anchor="top"
+    //             latitude={systemLat}
+    //             longitude={systemLon}
+    //             offsetTop={-22}
+    //             offsetLeft={-88}
+    //             onClose={() => this.setState({ userPopupInfo: null })}
+    //             closeOnClick={true}>
+    //             <p>{'Detection array is here'}</p>
+    //         </Popup>
+    //     )
+    // }
 
-    renderDronePopup() {
-        return (
-            <Popup
-                tipsize={5}
-                anchor="top"
-                latitude={43.4695}
-                longitude={-80.5319}
-                offsetTop={48}
-                offsetLeft={38}
-                onClose={() => this.setState({ dronePopupInfo: null })}
-                closeOnClick={true}>
-                <p>{'Drone 1'}</p>
-            </Popup>
-        )
-    }
+    // renderDronePopup() {
+    //     return (
+    //         <Popup
+    //             tipsize={5}
+    //             anchor="top"
+    //             latitude={43.4695}
+    //             longitude={-80.5319}
+    //             offsetTop={48}
+    //             offsetLeft={38}
+    //             onClose={() => this.setState({ dronePopupInfo: null })}
+    //             closeOnClick={true}>
+    //             <p>{'Drone 1'}</p>
+    //         </Popup>
+    //     )
+    // }
     bounds(project) {
         const { trackingInfo } = this.props.items;
         this.setState({
             withinGeoFence: false
         })
+        console.log(trackingInfo);
+        console.log(project);
         trackingInfo.forEach(trackedItem => {
+            console.log(trackedItem);
+            console.log(project);
             if(trackedItem.estimatedLat < project[0][1] && 
                 trackedItem.estimatedLon > project[0][0] && 
                 trackedItem.estimatedLat > project[1][1] &&
@@ -169,22 +165,19 @@ export default class Map extends Component {
                         offsetLeft={-98}>
                         <div
                             className={styles.pin}
-                            onClick={() => this.setState({ userPopupInfo: true })} >
+                             >
                             <Pin />
                         </div>
                     </Marker>
-                    {userPopupInfo ? this.renderUserPopup() : null}
                     {drones}
                     {detectedDrones}
-                    {dronePopupInfo ? this.renderDronePopup() : null}
                 </div>
                 {withinGeoFence ? 
                     <Rectangle 
-                        callback={this.bounds} 
-                        style={detectedStyle}>
+                        tracked={items.trackingInfo}>
                     </Rectangle> 
                     :
-                    <Rectangle style={undetectedStyle} callback={this.bounds}></Rectangle>
+                    <Rectangle tracked={items.trackingInfo}></Rectangle>
                     }
             </MapGL>
             
